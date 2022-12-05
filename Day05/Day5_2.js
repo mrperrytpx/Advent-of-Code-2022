@@ -1,39 +1,33 @@
 const readFile = require("fs").readFileSync;
 const file = readFile(__dirname + "/input.txt", "utf-8").replace(/\r/g, "").split("\n");
 
-// let boxes = [
-//     ["Z", "N"],
-//     ["M", "C", "D"],
-//     ["P"]
-// ];
+let stacks = file.slice(0, 8);
+const arrays = [];
+for (let string of stacks) {
+    let appendix = [];
+    for (let i = 1; i <= string.length; i += 4) appendix.push(string[i]);
+    arrays.push(appendix);
+}
 
-let boxes = [
-    ["M", "J", "C", "B", "F", "R", "L", "H"],
-    ["Z", "C", "D"],
-    ["H", "J", "F", "C", "N", "G", "W"],
-    ["P", "J", "D", "M", "T", "S", "B"],
-    ["N", "C", "D", "R", "J"],
-    ["W", "L", "D", "Q", "P", "J", "G", "Z"],
-    ["P", "Z", "T", "F", "R", "H"],
-    ["L", "V", "M", "G"],
-    ["C", "B", "G", "P", "F", "Q", "R", "J"]
-];
+let boxes = arrays[0].map((_, col) => arrays.map(row => row[col]));
+for (let i = 0; i < boxes.length; i++) {
+    boxes[i] = boxes[i].reverse().filter(x => x !== " ");
+}
 
-const instructions = file.filter((x) => x.charAt(0) === "m");
+const instructions = file.slice(10);
 
 for (let move of instructions) {
     const splitInstructions = move.split(" ");
     const howMany = +splitInstructions[1];
-    const startingCol = +splitInstructions[3];
-    const endingCol = +splitInstructions[5];
+    const startingCol = +splitInstructions[3] - 1;
+    const endingCol = +splitInstructions[5] - 1;
 
-    const boxStack = boxes[startingCol - 1].splice(howMany * -1);
-    boxes[endingCol - 1].push(boxStack);
-    boxes[endingCol - 1] = boxes[endingCol - 1].flat();
+    const boxStack = boxes[startingCol].splice(howMany * -1);
+    boxes[endingCol].push(boxStack);
+    boxes[endingCol] = boxes[endingCol].flat();
 }
 
 let firstBoxes = "";
-
 for (let box of boxes) firstBoxes += box[box.length - 1];
 
 console.log(firstBoxes);
