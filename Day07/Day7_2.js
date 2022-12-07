@@ -5,7 +5,6 @@ let sizesArr = [];
 let occurs = {};
 
 function folderSize(i, name = "/") {
-    if (name === "zdvj") console.log(i);
     occurs[name] = i;
     let dirSize = 0;
     let directories = [];
