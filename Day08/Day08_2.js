@@ -5,47 +5,30 @@ const ROW_LEN = file[0].length;
 const COL_LEN = file.length;
 
 function isVisible(x, y) {
+    let scenicArr = new Array(4).fill(0);
 
-    let scenicArr = [];
-
-    let length = 0;
     for (let i = y - 1; i >= 0; i--) {
-        length++;
-        if (+file[x][i] >= +file[x][y] || i === 0) {
-            scenicArr.push(length);
-            break;
-        }
+        scenicArr[0]++;
+        if (+file[x][i] >= +file[x][y] || i === 0) break;
     }
 
-    length = 0;
     for (let i = y + 1; i < ROW_LEN; i++) {
-        length++;
-        if (+file[x][i] >= +file[x][y] || ROW_LEN - i === 1) {
-            scenicArr.push(length);
-            break;
-        }
+        scenicArr[1]++;
+        if (+file[x][i] >= +file[x][y] || ROW_LEN - i === 1) break;
     }
 
-    length = 0;
     for (let i = x - 1; i >= 0; i--) {
-        length++;
-        if (+file[i][y] >= +file[x][y] || i === 0) {
-            scenicArr.push(length);
-            break;
+        scenicArr[2]++;
+        if (+file[i][y] >= +file[x][y] || i === 0) break;
 
-        }
     }
 
-    length = 0;
     for (let i = x + 1; i < COL_LEN; i++) {
-        length++;
-        if (+file[i][y] >= +file[x][y] || COL_LEN - i === 1) {
-            scenicArr.push(length);
-            break;
-        }
+        scenicArr[3]++;
+        if (+file[i][y] >= +file[x][y] || COL_LEN - i === 1) break;
     }
 
-    return scenicArr.map(x => x === 0 ? 1 : x).reduce((a, b) => a * b, 1);
+    return scenicArr.reduce((a, b) => a * b, 1);
 }
 
 let allScores = [];
