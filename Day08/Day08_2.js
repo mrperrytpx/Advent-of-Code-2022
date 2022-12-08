@@ -20,7 +20,6 @@ function isVisible(x, y) {
     for (let i = x - 1; i >= 0; i--) {
         scenicArr[2]++;
         if (+file[i][y] >= +file[x][y] || i === 0) break;
-
     }
 
     for (let i = x + 1; i < COL_LEN; i++) {
@@ -31,13 +30,12 @@ function isVisible(x, y) {
     return scenicArr.reduce((a, b) => a * b, 1);
 }
 
-let allScores = [];
+let highestScore = 0;
 for (let i = 1; i < ROW_LEN - 1; i++) {
     for (let j = 1; j < COL_LEN - 1; j++) {
         let score = isVisible(i, j);
-        allScores.push(score);
+        if (score > highestScore) highestScore = score;
     }
 }
 
-let highestScenicScore = allScores.sort((a, b) => b - a)[0];
-console.log(highestScenicScore);
+console.log(highestScore);
