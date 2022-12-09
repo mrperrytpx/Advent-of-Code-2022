@@ -35,25 +35,27 @@ let knots = new Array(10).fill([0, 0]);
 for (let motion of file) {
     motion = motion.split(" ");
     let [direction, amount] = motion;
+    let move = arrDirection(direction);
 
     for (let i = 0; i < amount; i++) {
-        let move = arrDirection(direction);
         knots[0] = reduceArr(knots[0], move, "+");
 
-        console.log("loop");
         for (let j = 1; j < knots.length; j++) {
             let diff = reduceArr(knots[j - 1], knots[j], "-");
-            // if (Math.abs(diff[0]) >= 2 || Math.abs(diff[1]) >= 2) {
-            //     console.log("diff, ", diff, j);
-            //     knots[j] = reduceArr(knots[j], diff, "-");
-            // }
+            if (diff[0] == 0 && diff[1] == 0) {
+                continue;
+            }
+            if (Math.abs(diff[0]) >= 2 || Math.abs(diff[1]) >= 2) {
+                diff[0] = Math.sign(diff[0]);
+                diff[1] = Math.sign(diff[1]);
+                knots[j] = reduceArr(knots[j], diff, "+");
+            }
         }
+        visited.push(knots[9]);
     }
-    console.log(knots);
-    break;
 }
 
-// let set = new Set(visited.map(JSON.stringify));
-// let uniques = Array.from(set).map(JSON.parse);
+let set = new Set(visited.map(JSON.stringify));
+let uniques = Array.from(set).map(JSON.parse);
 
-// console.log(uniques.length);
+console.log(uniques.length);
