@@ -1,6 +1,3 @@
-const readFile = require("fs").readFileSync;
-const file = readFile(__dirname + "/example.txt", "utf-8").replace(/\r/g, "").split("\n");
-
 let monkeys = {
     "monkey 0": {
         items: [66, 59, 64, 51],
