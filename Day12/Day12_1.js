@@ -11,10 +11,10 @@ for (let i = 0; i < file.length; i++) {
     row = row.map((x, idx) => {
         if (x === "S") {
             STARTING_CORD = [i, idx];
-            return "a".charCodeAt(0) - 1;
+            return "a".charCodeAt(0);
         } else if (x === "E") {
             END_CORD = [i, idx];
-            return "z".charCodeAt(0) + 1;
+            return "z".charCodeAt(0);
         } else {
             return x.charCodeAt(0);
         }
@@ -22,11 +22,9 @@ for (let i = 0; i < file.length; i++) {
     file[i] = row;
 }
 
-function isValid(row, col, lastValue) {
+function isInBounds(row, col, steps) {
     if (row < 0 || col < 0 || row >= ROWS || col >= COLS) return false;
-    const value = file[row][col];
-    if (Math.abs(value - lastValue) > 1) return false;
-    return [0, [row, col]];
+    return [steps + 1, [row, col]];
 }
 
 let start = [0, [...STARTING_CORD]];
@@ -36,7 +34,6 @@ let queue = [start];
 let locked = new Set();
 
 while (queue.length !== 0) {
-    queue.sort((a, b) => a[0] - b[0]);
     let [steps, pos] = queue.shift();
 
     const coord = `${pos[0]},${pos[1]}`;
@@ -50,15 +47,23 @@ while (queue.length !== 0) {
 
     const value = file[pos[0]][pos[1]];
 
-    const up = isValid(pos[0] - 1, pos[1], value);
-    const down = isValid(pos[0] + 1, pos[1], value);
-    const left = isValid(pos[0], pos[1] - 1, value);
-    const right = isValid(pos[0], pos[1] + 1, value);
+    const up = isInBounds(pos[0] - 1, pos[1], steps);
+    const down = isInBounds(pos[0] + 1, pos[1], steps);
+    const left = isInBounds(pos[0], pos[1] - 1, steps);
+    const right = isInBounds(pos[0], pos[1] + 1, steps);
 
-    const neighbours = [right, down, left, up].filter((elem) => elem !== false);
-    for (let i = 0; i < neighbours.length; i++) {
-        neighbours[i][0] = steps + 1;
-        queue.push(neighbours[i]);
-    }
+    let validNeighbours = [right, down, left, up].filter((elem) => elem !== false)
+        .filter(elem => {
+            const [x, y] = elem[1];
+            const neighbourValue = file[x][y];
+            if (neighbourValue - value <= 1) {
+                return true;
+            } else {
+                return false;
+            }
+        });
 
+    validNeighbours.forEach(x => queue.push(x));
 }
+
+console.log(END_CORD);
