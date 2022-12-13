@@ -14,7 +14,7 @@ function compareArrays(a, b) {
     if (Number.isInteger(a) && Number.isInteger(b)) return a - b;
 
     if (Array.isArray(a) && Array.isArray(b)) {
-        for (let i = 0; i < a.length && i < b.length; i++) {
+        for (let i = 0; i < Math.min(a.length, b.length); i++) {
             let left = a[i];
             let right = b[i];
 
