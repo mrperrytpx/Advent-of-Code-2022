@@ -23,7 +23,7 @@ for (let i = 0; i < file.length; i++) {
 }
 
 function isInBounds(row, col, steps) {
-    if (row < 0 || col < 0 || row >= ROWS || col >= COLS) return false;
+    if (row < 0 || col < 0 || row >= ROWS || col >= COLS) return null;
     return [steps + 1, [row, col]];
 }
 
@@ -36,9 +36,8 @@ let locked = new Set();
 while (queue.length !== 0) {
     let [steps, pos] = queue.shift();
 
-    const coord = `${pos[0]},${pos[1]}`;
-    if (locked.has(coord)) continue;
-    locked.add(coord);
+    if (locked.has(pos.toString())) continue;
+    locked.add(pos.toString());
 
     if (pos[0] === end[0] && pos[1] === end[1]) {
         console.log(steps);
@@ -52,18 +51,12 @@ while (queue.length !== 0) {
     const left = isInBounds(pos[0], pos[1] - 1, steps);
     const right = isInBounds(pos[0], pos[1] + 1, steps);
 
-    let validNeighbours = [right, down, left, up].filter((elem) => elem !== false)
+    let validNeighbours = [right, down, left, up].filter((elem) => !!elem)
         .filter(elem => {
             const [x, y] = elem[1];
             const neighbourValue = file[x][y];
-            if (neighbourValue - value <= 1) {
-                return true;
-            } else {
-                return false;
-            }
+            return neighbourValue - value <= 1;
         });
 
     validNeighbours.forEach(x => queue.push(x));
 }
-
-console.log(END_CORD);
