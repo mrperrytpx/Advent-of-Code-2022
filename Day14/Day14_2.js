@@ -2,7 +2,9 @@ const readFile = require("fs").readFileSync;
 const file = readFile(__dirname + "/input.txt", "utf-8").replace(/\r/g, "").split("\n").filter((_) => _.trim());
 
 let rockCoords = new Set();
-let highestY = 0;
+let biggestY = 0;
+let biggestX = 0;
+let smallestX = Number.MAX_SAFE_INTEGER;
 
 for (let rockMap of file) {
     const coords = rockMap.split("->");
@@ -12,23 +14,25 @@ for (let rockMap of file) {
 
         if (+left[0] === +right[0]) {
             const maxY = Math.max(+left[1], +right[1]);
-            if (maxY > highestY) highestY = maxY;
+            if (maxY > biggestY) biggestY = maxY;
             const minY = Math.min(+left[1], +right[1]);
             for (let j = minY; j <= maxY; j++) rockCoords.add([+left[0], j].toString());
         } else {
             const maxX = Math.max(+left[0], +right[0]);
+            if (maxX > biggestX) biggestX = maxX;
             const minX = Math.min(+left[0], +right[0]);
+            if (minX < smallestX) smallestX = minX;
             for (let j = minX; j <= maxX; j++) rockCoords.add([j, +left[1]].toString());
         }
     }
 }
 
-const infinityRow = highestY + 2;
-for (let i = 0; i < 1000; i++) rockCoords.add([i, infinityRow].toString());
+const infinityRow = biggestY + 2;
+for (let i = 500 - (infinityRow) - 1; i < 500 + (infinityRow) + 1; i++) {
+    rockCoords.add([i, infinityRow].toString());
+}
 
 const startSize = rockCoords.size;
-
-console.time("sand");
 
 function sand(coord) {
     let [x, y] = coord;
@@ -51,8 +55,5 @@ function sand(coord) {
 let shouldRun = true;
 while (shouldRun) shouldRun = sand([500, 0]);
 
-console.timeEnd("sand");
-
 const endSize = rockCoords.size;
-
 console.log(endSize - startSize);
