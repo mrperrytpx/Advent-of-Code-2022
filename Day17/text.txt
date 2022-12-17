@@ -6,27 +6,3 @@
 │    2    │ 0 │ 0 │ 0 │ 0 │ 0 │ 0 │ 0 │
 │    3    │ 0 │ 0 │ 0 │ 0 │ 0 │ 0 │ 0 │
 └─────────┴───┴───┴───┴───┴───┴───┴───┘
-
-
-
-curr row = 0
-top left    row, col 2
-newtopleft  row+1, col 2
-not stopped true
-
-while not stopped 
-    for each row
-        for each cell
-            ako newtopleft row > board size
-                collision
-                board row col = 1
-                not stopped je false
-                break;
-            ako je cell[newtopleft][col] === 1
-                collision
-                board row col = 1
-                notStopped je false
-                break
-            alko nije cell[newtopleft][col] === 1
-                cur row ++
-            
